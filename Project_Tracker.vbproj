@@ -275,9 +275,11 @@
     <Compile Include="Models\Dashboard.vb" />
     <Compile Include="Models\IdentityModels.vb" />
     <Compile Include="Models\ManageViewModels.vb" />
+    <Compile Include="Models\ProjectDetailsModel.vb" />
     <Compile Include="Models\ProjectModel.vb" />
     <Compile Include="Models\ProjFilesModel.vb" />
     <Compile Include="Models\ReqFilesModel.vb" />
+    <Compile Include="Models\TicketSubmitterModel.vb" />
     <Compile Include="Models\UserRoleViewModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

@@ -8,6 +8,9 @@ Imports DataLibrary.FileProcessor
 Imports DataLibrary.RequestProcessor
 Imports DataLibrary.ReqFileProcessor
 Imports DataLibrary.ProjFileProcessor
+Imports DataLibrary.ProjectTicketsProcessor
+Imports DataLibrary.TicketSubmitterProcessor
+Imports DataLibrary.ProjectUserProcessor
 Imports System.IO
 Imports System.Threading.Tasks
 Imports System.Data.SqlClient
@@ -365,12 +368,26 @@ Namespace Controllers
             Dim Files = LoadBoundProjFiles(id)
             Dim Project = LoadProject(id)
 
-            Dim ProjFiles = New ProjFilesModel() With {
-                                        .Files = Files,
-                                        .Project = Project
+            Dim Tickets = New TicketSubmitterModel With {
+                                        .Ticket = New List(Of DataLibrary.TicketModel),
+                                        .Submitter = New List(Of DataLibrary.UserModel)
                                 }
 
-            Return View(ProjFiles)
+            For Each ticket As DataLibrary.TicketModel In LoadBoundProjTickets(id)
+                Tickets.Ticket.Add(ticket)
+                Tickets.Submitter.Add(LoadBoundTicketSubmitter(ticket.Id))
+            Next
+
+            Dim Users = LoadBoundProjUsers(id)
+
+            Dim ProjDetails = New ProjectDetailsModel() With {
+                                        .Files = Files,
+                                        .Project = Project,
+                                        .Tickets = Tickets,
+                                        .Users = Users
+                                }
+
+            Return View(ProjDetails)
         End Function
 
         <Authorize>

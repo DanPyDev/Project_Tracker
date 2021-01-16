@@ -21,6 +21,7 @@ End Code
 <p>
     @Html.ActionLink("Create New Project", "AddProject", "Dashboard")
 </p>
+
 <table class="table">
     <tr>
         <th style="white-space:nowrap;">

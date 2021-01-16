@@ -1,4 +1,4 @@
-﻿@ModelType ProjFilesModel
+﻿@ModelType ProjectDetailsModel
 @Code
     ViewData("Title") = "ProjectDetails"
     Layout = "~/Views/Shared/_Layout.vbhtml"
@@ -17,7 +17,7 @@ End Code
                 @Html.HiddenFor(Function(model) model.Project.Id)
 
                 <div class="form-group">
-                    @Html.LabelFor(Function(model) model.Project.ProjectTitle, htmlAttributes:=New With {.class = "control-label col-md-2"})
+                    <label class="control-label col-md-2">Project Title</label>
                     <div class="col-md-10">
                         @Html.EditorFor(Function(model) model.Project.ProjectTitle, New With {.htmlAttributes = New With {.class = "form-control"}})
                         @Html.ValidationMessageFor(Function(model) model.Project.ProjectTitle, "", New With {.class = "text-danger"})
@@ -25,7 +25,7 @@ End Code
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(Function(model) model.Project.ProjectDescription, htmlAttributes:=New With {.class = "control-label col-md-2"})
+                    <label class="control-label col-md-2">Project Description</label>
                     <div class="col-md-10">
                         @Html.EditorFor(Function(model) model.Project.ProjectDescription, New With {.htmlAttributes = New With {.class = "form-control"}})
                         @Html.ValidationMessageFor(Function(model) model.Project.ProjectDescription, "", New With {.class = "text-danger"})
@@ -100,6 +100,113 @@ End Code
     @Html.ActionLink("Back to Projects", "ProjectList")
 </div>
 
+
+<span style="display:inline-block; height: 40px;"></span>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table">
+            <tr>
+                <th style="white-space:nowrap;">
+                    User Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Role
+                </th>
+            </tr>
+
+            @code
+                nas = 0
+            End Code
+
+            @For Each item In Model.Users
+                If Not item.Role.Equals("N/A") Then
+                    @<tr>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Role)
+                        </td>
+                    </tr>
+                Else
+                    nas += 1
+                End If
+            Next
+
+            @If nas = Model.Users.Count Then
+                @<tr>
+                    <td>
+                        There are no Users Assigned to this project.
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            End If
+
+        </table>
+    </div>
+
+    <div class="col-sm-6">
+        <table class="table">
+            <tr>
+                <th style="white-space:nowrap;">
+                    Title
+                </th>
+                <th>
+                    Submitter
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Created
+                </th>
+            </tr>
+
+            @If Model.Tickets.Ticket.Count > 0 Then
+                Dim index = 0
+                For Each item In Model.Tickets.Ticket
+                    @<tr>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) Model.Tickets.Submitter(index).Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Function(modelItem) item.Created)
+                        </td>
+                    </tr>
+                    index += 1
+                Next
+            Else
+                @<tr>
+                    <td>
+                        There are no Tickets Associated with this Project.
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            End If
+
+        </table>
+    </div>
+</div>
+
+
+
 @Section Scripts
     @Scripts.Render("~/bundles/jqueryval")
 End Section
@@ -110,14 +217,14 @@ End Section
         const data = button.id;
         const url = "/Dashboard/DownloadFile/".concat(button.id.toString());
         $.post(url, data, function (data, status, response) {
-                                                    //console.log(response.getResponseHeader("Content-Disposition").split("filename=")[1])
-                                                    //console.log(response.getResponseHeader("Content-Type"))
-                                                    const url = window.URL
-                                                        .createObjectURL(new Blob([data]));
-                                                    const link = document.createElement('a');
-                                                    link.href = url;
-                                                    link.setAttribute('download', response.getResponseHeader("Content-Disposition").split("filename=")[1]);
-                                                    link.click();
-                                        })
+            //console.log(response.getResponseHeader("Content-Disposition").split("filename=")[1])
+            //console.log(response.getResponseHeader("Content-Type"))
+            const url = window.URL
+                .createObjectURL(new Blob([data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', response.getResponseHeader("Content-Disposition").split("filename=")[1]);
+            link.click();
+        })
     });
 </script>
