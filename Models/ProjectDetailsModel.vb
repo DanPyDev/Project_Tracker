@@ -2,6 +2,7 @@
     Private _Project As DataLibrary.ProjectModel
     Private _Files As List(Of DataLibrary.FileModel)
     Private _Users As List(Of DataLibrary.UserModel)
+    Private _UsersFull As List(Of DataLibrary.UserModel)
     Private _Tickets As TicketSubmitterModel
 
     Public Property Project() As DataLibrary.ProjectModel
@@ -28,6 +29,15 @@
         End Get
         Set(ByVal value As List(Of DataLibrary.UserModel))
             _Users = value
+        End Set
+    End Property
+
+    Public Property UsersFull() As List(Of DataLibrary.UserModel)
+        Get
+            Return _UsersFull
+        End Get
+        Set(ByVal value As List(Of DataLibrary.UserModel))
+            _UsersFull = value
         End Set
     End Property
 

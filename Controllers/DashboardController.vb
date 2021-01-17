@@ -384,6 +384,7 @@ Namespace Controllers
                                         .Files = Files,
                                         .Project = Project,
                                         .Tickets = Tickets,
+                                        .UsersFull = LoadUsers(),
                                         .Users = Users
                                 }
 
