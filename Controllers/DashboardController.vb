@@ -288,6 +288,14 @@ Namespace Controllers
             Return RedirectToAction("ProjectDetails", "Dashboard", New With {.id = ProjId})
         End Function
 
+        <Authorize>
+        <Route("Dashboard/RemoveProjectUser/{ProjId}/{UserId}")>
+        Function RemoveProjectUser(ProjId As Integer, UserId As Integer) As ActionResult
+            DeleteBoundProjUser(ProjId, UserId)
+
+            Return RedirectToAction("ProjectDetails", "Dashboard", New With {.id = ProjId})
+        End Function
+
         ' GET: /Dashboard/ManageRoles
         <Authorize>
         Function RoleList() As ActionResult
@@ -389,6 +397,23 @@ Namespace Controllers
                                 }
 
             Return View(ProjDetails)
+        End Function
+
+        <Authorize>
+        <HttpPost>
+        Function AssignUsers() As ActionResult
+            Dim raw = New StreamReader(Request.InputStream).ReadToEnd()
+
+            Dim projId = Request.UrlReferrer.ToString().Split("/").Last()
+
+            If Integer.TryParse(projId, vbNull) Then
+                For Each user As String In raw.Split(",")
+                    Dim userId = GetUserTableId(user)
+                    BindUser(CInt(projId), userId(0).Id)
+                Next
+            End If
+
+            Return Redirect(Request.UrlReferrer.ToString())
         End Function
 
         <Authorize>

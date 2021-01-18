@@ -109,7 +109,7 @@ End Code
 <br>
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-lg-6">
 
         <h4><b>Assign Users to this Project</b></h4>
 
@@ -156,6 +156,7 @@ End Code
                 <th>
                     Role
                 </th>
+                <th></th>
             </tr>
 
             @code
@@ -174,6 +175,9 @@ End Code
                         <td>
                             @Html.DisplayFor(Function(modelItem) item.Role)
                         </td>
+                        <td>
+                            @Html.ActionLink("Unassign", "RemoveProjectUser", New With {.ProjId = Model.Project.Id, .UserId = item.Id})
+                        </td>
                     </tr>
                 Else
                     nas += 1
@@ -187,13 +191,14 @@ End Code
                     </td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
             End If
 
         </table>
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-lg-6">
         <h4><b>Project Tickets</b></h4>
         
         <table class="table">
@@ -254,35 +259,40 @@ End Section
 
 <script>
     var button = document.querySelector("[value='Download']");
-    button.addEventListener(type = "click", function () {
-        const data = button.id;
-        const url = "/Dashboard/DownloadFile/".concat(button.id.toString());
-        $.post(url, data, function (data, status, response) {
-            //console.log(response.getResponseHeader("Content-Disposition").split("filename=")[1])
-            //console.log(response.getResponseHeader("Content-Type"))
-            const url = window.URL
-                .createObjectURL(new Blob([data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', response.getResponseHeader("Content-Disposition").split("filename=")[1]);
-            link.click();
-        })
-    });
 
-    var button = document.getElementById("assignUsers");
-    button.addEventListener(type="click", function () {
-        var selected = document.querySelector("[class='selected']");
+    if (button == null) {
+
+    } else {
+        button.addEventListener(type = "click", function () {
+            const data = button.id;
+            const url = "/Dashboard/DownloadFile/".concat(button.id.toString());
+            $.post(url, data, function (data, status, response) {
+                //console.log(response.getResponseHeader("Content-Disposition").split("filename=")[1])
+                //console.log(response.getResponseHeader("Content-Type"))
+                const url = window.URL
+                    .createObjectURL(new Blob([data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', response.getResponseHeader("Content-Disposition").split("filename=")[1]);
+                link.click();
+            })
+        });
+    }
+
+    var button1 = document.getElementById("assignUsers");
+    button1.addEventListener(type="click", function () {
+        var selected = document.querySelectorAll("[class='selected']");
 
         var users = new Array();
-        var tok = selected.childNodes[0].dataset.tokens;
+        
+        selected.forEach(function (item, index) {
+            var tok = item.childNodes[0].dataset.tokens;
+            users.push(tok.split("_")[0]);
+        });
 
-        console.log(tok);
+        const data = users.toString();
 
-        users.push(tok.split("_")[0]);
-
-        const data = role.toString().concat("_").concat(users.toString());
-
-        $.post("/Dashboard/ManageUsersRole", data, function (data, status) {location.reload()})
+        $.post("/Dashboard/AssignUsers", data, function (data, status) {location.reload()})
 
     });
 </script>
