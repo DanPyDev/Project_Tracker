@@ -11,6 +11,7 @@ Imports DataLibrary.ProjFileProcessor
 Imports DataLibrary.ProjectTicketsProcessor
 Imports DataLibrary.TicketSubmitterProcessor
 Imports DataLibrary.ProjectUserProcessor
+Imports DataLibrary.TicketProcessor
 Imports System.IO
 Imports System.Threading.Tasks
 Imports System.Data.SqlClient
@@ -320,6 +321,29 @@ Namespace Controllers
         End Function
 
         <Authorize>
+        Function AddTicket(id As Integer) As ActionResult
+            Dim ticket = New TicketViewModel With {
+                                    .ProjId = id
+                                }
+
+            Return View(ticket)
+        End Function
+
+        <Authorize>
+        <HttpPost>
+        <ValidateAntiForgeryToken>
+        Function AddTicket(model As TicketViewModel) As ActionResult
+            If (ModelState.IsValid) Then
+                Dim TicketId = CreateTicket(model.Ticket.Title, model.Ticket.Description, model.Ticket.Status, model.Ticket.Type, model.Ticket.Priority)
+                BindTicket(model.ProjId, TicketId)
+                Dim UserId = HttpContext.GetOwinContext().Authentication.User.Claims(15).Value
+                BindSubmitter(TicketId, GetUserTableId(UserId)(0).Id)
+            End If
+
+            Return RedirectToAction("ProjectDetails", "Dashboard", New With {.id = model.ProjId})
+        End Function
+
+        <Authorize>
         Function EditRole(id As Integer) As ActionResult
             Dim Role = LoadRole(id)
             Return View(Role)
@@ -350,7 +374,6 @@ Namespace Controllers
         <Authorize>
         Function ProjectList() As ActionResult
             Dim data = LoadProjects()
-
             Dim projects = New List(Of ProjectModel)()
 
             For Each row As DataLibrary.ProjectModel In data

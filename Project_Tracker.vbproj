@@ -280,6 +280,7 @@
     <Compile Include="Models\ProjFilesModel.vb" />
     <Compile Include="Models\ReqFilesModel.vb" />
     <Compile Include="Models\TicketSubmitterModel.vb" />
+    <Compile Include="Models\TicketViewModel.vb" />
     <Compile Include="Models\UserRoleViewModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -376,6 +377,7 @@
     <Content Include="Views\Dashboard\ProjectDetails.vbhtml" />
     <Content Include="Views\Dashboard\EditRole.vbhtml" />
     <Content Include="Views\Dashboard\RequestDetails.vbhtml" />
+    <Content Include="Views\Dashboard\AddTicket.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

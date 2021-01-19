@@ -200,7 +200,11 @@ End Code
 
     <div class="col-lg-6">
         <h4><b>Project Tickets</b></h4>
-        
+
+        @Html.ActionLink("Create Ticket", "AddTicket", New With {.id = Model.Project.Id})
+
+        <br>
+
         <table class="table">
             <tr>
                 <th style="white-space:nowrap;">
@@ -215,6 +219,7 @@ End Code
                 <th>
                     Created
                 </th>
+                <th></th>
             </tr>
 
             @If Model.Tickets.Ticket.Count > 0 Then
@@ -233,6 +238,9 @@ End Code
                         <td>
                             @Html.DisplayFor(Function(modelItem) item.Created)
                         </td>
+                        <td>
+                            @Html.ActionLink("Details", "TicketDetails", New With {.ProjId = Model.Project.Id, .TicketId = item.Id})
+                        </td>
                     </tr>
                     index += 1
                 Next
@@ -241,6 +249,7 @@ End Code
                     <td>
                         There are no Tickets Associated with this Project.
                     </td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
