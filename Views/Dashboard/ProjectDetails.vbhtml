@@ -27,7 +27,7 @@ End Code
                 <div class="form-group">
                     <label class="control-label col-md-2">Project Description</label>
                     <div class="col-md-10">
-                        @Html.EditorFor(Function(model) model.Project.ProjectDescription, New With {.htmlAttributes = New With {.class = "form-control"}})
+                        @Html.TextAreaFor(Function(model) model.Project.ProjectDescription, New With {.class = "form-control", .rows = 4})
                         @Html.ValidationMessageFor(Function(model) model.Project.ProjectDescription, "", New With {.class = "text-danger"})
                     </div>
                 </div>
